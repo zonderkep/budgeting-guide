@@ -1,0 +1,28 @@
+---
+interface Item {
+  text: string
+  detail?: string
+}
+interface Props {
+  id: string
+  items: Array<string | Item>
+}
+const { id, items } = Astro.props
+---
+
+<div class="checklist" data-checklist={id}>
+  {items.map((item, index) => {
+    const content = typeof item === 'string' ? { text: item } : item
+    const inputId = `${id}-${index}`
+    return (
+      <label class="check-row" for={inputId}>
+        <input id={inputId} type="checkbox" data-check-index={index} />
+        <span class="custom-check" aria-hidden="true"></span>
+        <span>
+          <strong>{content.text}</strong>
+          {content.detail && <small>{content.detail}</small>}
+        </span>
+      </label>
+    )
+  })}
+</div>

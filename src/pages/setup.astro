@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import Checklist from '../components/Checklist.astro'
+import ChecklistScript from '../components/ChecklistScript.astro'
+import ActualMap from '../components/ActualMap.astro'
+import Callout from '../components/Callout.astro'
+import NextStep from '../components/NextStep.astro'
+
+const setupItems = [
+  { text: 'Create a budget file.', detail: 'Open Actual Budget. Select Create new file. Give the file a clear name.' },
+  { text: 'Add each spending account.', detail: 'Add checking, savings, cash, and credit card accounts that affect your budget.' },
+  { text: 'Enter the current balance.', detail: 'Use the balance from your bank. Check the date of that balance.' },
+  { text: 'Add tracking accounts only if useful.', detail: 'A retirement or mortgage account can stay off budget. It will not change the money that you can assign.' },
+  { text: 'Choose your categories.', detail: 'Start with bills, food, transport, debt payments, and known future costs.' },
+  { text: 'Assign the money that you have.', detail: 'Give available money to categories until To Budget is zero.' },
+]
+---
+
+<BaseLayout title="Set up your budget" description="Set up a new household budget file in Actual Budget.">
+  <PageHero eyebrow="Step 1 · Set up" title="Start with the money you have." intro="Do not budget money that you expect later. Add your accounts. Then give the available money a job." step={1} />
+  <div class="content-shell">
+    <section class="content-section" aria-labelledby="setup-list">
+      <div class="section-heading narrow"><p class="eyebrow">One-time setup</p><h2 id="setup-list">Build the budget in six steps.</h2></div>
+      <Checklist id="setup" items={setupItems} />
+    </section>
+
+    <ActualMap view="budget" />
+
+    <section class="two-column-section" aria-label="Account guidance">
+      <div><p class="eyebrow">On budget</p><h2>Money you can use now</h2><p>Add checking, savings, cash, and credit cards as on-budget accounts.</p></div>
+      <div><p class="eyebrow">Off budget</p><h2>Money you only track</h2><p>Use off-budget accounts for items such as a mortgage or retirement account. These accounts do not fund categories.</p></div>
+    </section>
+
+    <Callout title="Stop when To Budget is zero." tone="yellow">
+      <p>Zero does not mean that you spent all your money. It means that each dollar has a category.</p>
+    </Callout>
+
+    <NextStep href="/categories/" label="Next step" title="Choose useful categories." text="Use the category prompts to find regular and future costs." />
+  </div>
+  <ChecklistScript />
+</BaseLayout>

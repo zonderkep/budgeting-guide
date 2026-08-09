@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import Checklist from '../components/Checklist.astro'
+import ChecklistScript from '../components/ChecklistScript.astro'
+import Callout from '../components/Callout.astro'
+import NextStep from '../components/NextStep.astro'
+import { categoryGroups } from '../data/categories'
+---
+
+<BaseLayout title="Choose your categories" description="Use a complete checklist to choose household budget categories.">
+  <PageHero eyebrow="Step 2 · Plan" title="Plan for today and later." intro="Choose only the categories that your household needs. You can add or remove a category at any time." step={2} />
+  <div class="content-shell">
+    <Callout title="Use your real spending." tone="blue">
+      <p>Start with the last one or two months. Use a percentage only as a check. For example, Ramsey suggests that housing should be 25% or less of take-home pay.</p>
+    </Callout>
+
+    <section class="category-section" aria-labelledby="category-heading">
+      <div class="section-heading narrow"><p class="eyebrow">Category prompts</p><h2 id="category-heading">Check each cost that applies.</h2><p>A checked item stays checked in this browser.</p></div>
+      <div class="category-groups">
+        {categoryGroups.map((group, index) => (
+          <details class:list={['category-group', `tone-${group.tone}`]}>
+            <summary><span class="category-number">{String(index + 1).padStart(2, '0')}</span><span><strong>{group.name}</strong><small>{group.note}</small></span><i aria-hidden="true"></i></summary>
+            <Checklist id={`categories-${index}`} items={[...group.items]} />
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="formula-card" aria-labelledby="future-costs">
+      <div><p class="eyebrow">Known future costs</p><h2 id="future-costs">Save a little each month.</h2><p>Use a sinking fund for a known cost. Name the cost and the date.</p></div>
+      <div class="formula"><span>Total cost</span><b>÷</b><span>Months left</span><b>=</b><strong>Monthly amount</strong></div>
+      <p class="formula-example">Example: $600 car insurance ÷ 6 months = $100 each month.</p>
+    </section>
+
+    <div class="reset-row"><button class="text-button" type="button" data-reset-progress>Reset all checklist progress</button></div>
+    <NextStep href="/day-to-day/" label="Next step" title="Use the daily routine." text="Review transactions often. A short routine keeps the budget useful." />
+  </div>
+  <ChecklistScript />
+</BaseLayout>

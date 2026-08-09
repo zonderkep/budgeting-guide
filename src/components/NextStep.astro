@@ -1,0 +1,18 @@
+---
+interface Props {
+  href: string
+  label: string
+  title: string
+  text: string
+}
+const { href, label, title, text } = Astro.props
+---
+
+<aside class="next-step">
+  <div>
+    <p class="eyebrow">{label}</p>
+    <h2>{title}</h2>
+    <p>{text}</p>
+  </div>
+  <a class="button button-dark" href={href}>Continue <span aria-hidden="true">→</span></a>
+</aside>

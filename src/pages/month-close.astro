@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import Checklist from '../components/Checklist.astro'
+import ChecklistScript from '../components/ChecklistScript.astro'
+import Callout from '../components/Callout.astro'
+import NextStep from '../components/NextStep.astro'
+
+const closeItems = [
+  { text: 'Wait for late transactions.', detail: 'Review the old month after the new month starts. The second to fifth day often works well.' },
+  { text: 'Import the final transactions.', detail: 'Check for missing, pending, or duplicate entries.' },
+  { text: 'Categorize every transaction.', detail: 'Fix unclear categories and split mixed purchases.' },
+  { text: 'Reconcile each account.', detail: 'Compare the cleared balance in Actual with the cleared balance at your bank.' },
+  { text: 'Cover overspending.', detail: 'Move money from a lower-priority category. Do not ignore a negative balance.' },
+  { text: 'Review money that remains.', detail: 'Let useful balances roll forward. Move money only when your priorities changed.' },
+  { text: 'Fund the new month.', detail: 'Assign available money in priority order. Stop when To Budget is zero.' },
+]
+---
+
+<BaseLayout title="Monthly review" description="Reconcile Actual Budget and prepare the next month.">
+  <PageHero eyebrow="Step 4 · Reconcile" title="Finish the old month. Start the new one." intro="Actual Budget has no close-month command. Use this review to confirm that the budget is correct." step={4} />
+  <div class="content-shell">
+    <section class="content-section" aria-labelledby="close-heading">
+      <div class="section-heading narrow"><p class="eyebrow">Monthly checklist</p><h2 id="close-heading">Review in this order.</h2></div>
+      <Checklist id="month-close" items={closeItems} />
+    </section>
+
+    <section class="balance-check" aria-labelledby="reconcile-heading">
+      <div><p class="eyebrow">Reconcile</p><h2 id="reconcile-heading">Two cleared balances should match.</h2><p>Mark cleared transactions in Actual. Compare the total with the cleared balance from your bank.</p></div>
+      <div class="balance-equation" aria-label="Example of matching balances"><span><small>Actual example</small>$1,284.20</span><b>=</b><span><small>Bank example</small>$1,284.20</span></div>
+    </section>
+
+    <Callout title="Do not force the balance to match." tone="yellow"><p>Find the missing or incorrect transaction. A balance adjustment can hide a problem.</p></Callout>
+
+    <NextStep href="/setup/" label="Keep the cycle going" title="Assign the next money you receive." text="Return to the same priorities. Change the plan when your needs change." />
+  </div>
+  <ChecklistScript />
+</BaseLayout>

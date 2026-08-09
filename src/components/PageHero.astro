@@ -1,0 +1,19 @@
+---
+interface Props {
+  eyebrow: string
+  title: string
+  intro: string
+  step?: number
+}
+const { eyebrow, title, intro, step } = Astro.props
+import BudgetTrail from './BudgetTrail.astro'
+---
+
+<section class="page-hero">
+  <div class="page-shell">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="lede">{intro}</p>
+    {step && <BudgetTrail current={step} />}
+  </div>
+</section>

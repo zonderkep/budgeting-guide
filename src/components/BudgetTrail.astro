@@ -1,0 +1,17 @@
+---
+import { steps } from '../data/site'
+const { current = 0 } = Astro.props
+---
+
+<nav class="budget-trail" aria-label="Budget steps">
+  <ol>
+    {steps.map((step, index) => (
+      <li class:list={{ active: index + 1 === current, complete: current > index + 1 }}>
+        <a href={step.href} aria-current={index + 1 === current ? 'step' : undefined}>
+          <span>{step.short}</span>
+          {step.label}
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>

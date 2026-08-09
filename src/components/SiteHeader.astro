@@ -1,0 +1,57 @@
+---
+import { navigation } from '../data/site'
+
+const pathname = Astro.url.pathname
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Budget, Step by Step home">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>Budget, <strong>Step by Step</strong></span>
+    </a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="menu-label">Menu</span>
+      <span class="menu-lines" aria-hidden="true"></span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      {navigation.map((item) => (
+        <a href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu-button')
+  const nav = document.querySelector<HTMLElement>('.site-nav')
+
+  const closeMenu = (returnFocus = false) => {
+    button?.setAttribute('aria-expanded', 'false')
+    nav?.classList.remove('is-open')
+    if (returnFocus) button?.focus()
+  }
+
+  button?.addEventListener('click', () => {
+    const isOpen = button.getAttribute('aria-expanded') === 'true'
+    button.setAttribute('aria-expanded', String(!isOpen))
+    nav?.classList.toggle('is-open', !isOpen)
+  })
+
+  nav?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeMenu()
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && button?.getAttribute('aria-expanded') === 'true') closeMenu(true)
+  })
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node
+    if (!nav?.contains(target) && !button?.contains(target)) closeMenu()
+  })
+
+  window.matchMedia('(min-width: 901px)').addEventListener('change', (event) => {
+    if (event.matches) closeMenu()
+  })
+</script>

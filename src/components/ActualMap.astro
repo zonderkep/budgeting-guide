@@ -1,0 +1,38 @@
+---
+const { view = 'budget' } = Astro.props
+const isBudget = view === 'budget'
+---
+
+<figure class="actual-map">
+  <div class="mock-window" aria-hidden="true">
+    <div class="mock-bar"><i></i><i></i><i></i><span>Actual Budget</span></div>
+    <div class="mock-app">
+      <div class="mock-sidebar">
+        <b>{isBudget ? 'Budget' : 'Accounts'}</b>
+        <span>All accounts</span>
+        <span>Checking</span>
+        <span>Savings</span>
+      </div>
+      {isBudget ? (
+        <div class="mock-main mock-budget">
+          <div class="mock-total"><small>To Budget</small><strong>$0.00</strong></div>
+          <div class="mock-category"><b>Home</b><span></span><em>$1,200</em></div>
+          <div class="mock-category"><b>Food</b><span></span><em>$480</em></div>
+          <div class="mock-category"><b>Future costs</b><span></span><em>$200</em></div>
+          <div class="map-label label-one">Assign this to zero</div>
+          <div class="map-label label-two">Fund each category</div>
+        </div>
+      ) : (
+        <div class="mock-main mock-transactions">
+          <div class="mock-tools"><span>Import</span><span>Add new</span></div>
+          <div class="mock-transaction"><i></i><b>Grocery store</b><span>Groceries</span><em>−$72.40</em></div>
+          <div class="mock-transaction"><i></i><b>Hardware store</b><span>Split</span><em>−$48.16</em></div>
+          <div class="mock-transaction faded"><i></i><b>Payee</b><span>Category</span><em>Amount</em></div>
+          <div class="map-label label-three">Import your file here</div>
+          <div class="map-label label-four">Check every category</div>
+        </div>
+      )}
+    </div>
+  </div>
+  <figcaption>A simplified map of the Actual Budget screen. The exact layout can change.</figcaption>
+</figure>

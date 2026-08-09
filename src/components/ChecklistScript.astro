@@ -1,0 +1,46 @@
+<script>
+  const storageKey = 'budget-step-by-step-v1'
+  const checklists = document.querySelectorAll<HTMLElement>('[data-checklist]')
+  const resetButton = document.querySelector<HTMLButtonElement>('[data-reset-progress]')
+
+  const readState = (): Record<string, number[]> => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '{}')
+    } catch {
+      localStorage.removeItem(storageKey)
+      return {}
+    }
+  }
+
+  const state = readState()
+
+  checklists.forEach((list) => {
+    const id = list.dataset.checklist
+    if (!id) return
+
+    const checked = state[id] || []
+    list.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach((input) => {
+      const index = Number(input.dataset.checkIndex)
+      input.checked = checked.includes(index)
+      input.addEventListener('change', () => {
+        state[id] = Array.from(list.querySelectorAll<HTMLInputElement>('input:checked')).map((item) => Number(item.dataset.checkIndex))
+        localStorage.setItem(storageKey, JSON.stringify(state))
+      })
+    })
+  })
+
+  resetButton?.addEventListener('click', () => {
+    localStorage.removeItem(storageKey)
+    Object.keys(state).forEach((key) => delete state[key])
+    checklists.forEach((list) => {
+      list.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach((input) => {
+        input.checked = false
+      })
+    })
+    const originalText = resetButton.textContent
+    resetButton.textContent = 'Progress reset'
+    window.setTimeout(() => {
+      resetButton.textContent = originalText
+    }, 2000)
+  })
+</script>

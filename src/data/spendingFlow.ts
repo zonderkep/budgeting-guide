@@ -52,7 +52,7 @@ export const flowNodes: FlowNode[] = [
   },
   {
     id: 'high-interest-debt', phase: 3, kind: 'question', title: 'Do you have debt above about 10% interest?',
-    text: 'The source flowchart treats this as high-interest debt. Credit cards often belong here.',
+    text: 'This is high-interest debt. Credit cards and Personsal Loans often belong here.',
     options: [
       { label: 'Yes', detail: 'Pay this debt before building the full emergency fund.', next: 'pay-high-debt' },
       { label: 'No', detail: 'Build the full emergency fund.', next: 'full-emergency-fund' },
@@ -72,7 +72,7 @@ export const flowNodes: FlowNode[] = [
   },
   {
     id: 'moderate-interest-debt', phase: 3, kind: 'question', title: 'Do you have non-mortgage debt above about 4% to 5% interest?',
-    text: 'The source flowchart treats this as moderate-interest debt. Your risk tolerance can change this choice.',
+    text: 'This is moderate-interest debt. Car and student loans are likely in this list.',
     options: [
       { label: 'Yes', detail: 'Decide whether to pay it before investing more.', next: 'pay-moderate-debt' },
       { label: 'No', detail: 'Move to retirement saving.', next: 'start-retirement' },

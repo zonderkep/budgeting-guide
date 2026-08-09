@@ -1,0 +1,124 @@
+---
+import { flowNodes, flowPhases } from '../data/spendingFlow'
+---
+
+<section class="flow-guide" aria-labelledby="flow-guide-heading">
+  <div class="flow-guide-heading">
+    <div>
+      <p class="eyebrow">Guided path</p>
+      <h2 id="flow-guide-heading">Start with the first priority.</h2>
+      <p>Complete each item that applies to you. The path does not save your answers.</p>
+    </div>
+    <button class="text-button flow-restart" type="button" data-flow-restart hidden>Start again</button>
+  </div>
+
+  <nav class="flow-progress" aria-label="Money priority phases">
+    <ol>
+      {flowPhases.map((phase) => (
+        <li data-flow-phase={phase.number} class:list={{ active: phase.number === 0 }}>
+          <span>{phase.number}</span>
+          <small>{phase.short}</small>
+        </li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="flow-stage">
+    {flowNodes.map((node, index) => (
+      <article class:list={['flow-node', `flow-node-${node.kind}`, `flow-phase-${node.phase}`]} data-flow-node={node.id} data-phase={node.phase} hidden={index !== 0}>
+        <div class="flow-node-label"><span>Phase {node.phase}</span><b>{flowPhases[node.phase].label}</b></div>
+        <h3 tabindex="-1">{node.title}</h3>
+        <p>{node.text}</p>
+        {node.items && <ul>{node.items.map((item) => <li>{item}</li>)}</ul>}
+        <div class:list={['flow-options', { 'flow-options-single': node.options.length === 1 }]}>
+          {node.options.map((option) => (
+            <button type="button" data-flow-next={option.next} data-flow-reset={option.next === 'foundation' ? '' : undefined}>
+              <strong>{option.label}</strong>
+              {option.detail && <small>{option.detail}</small>}
+            </button>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="flow-controls">
+    <button class="text-button" type="button" data-flow-back hidden><span aria-hidden="true">←</span> Back one step</button>
+    <p data-flow-count>First decision</p>
+  </div>
+
+  <noscript>
+    <p class="flow-noscript">JavaScript is needed for the guided path. Use the complete source flowchart below.</p>
+  </noscript>
+</section>
+
+<script>
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-flow-node]'))
+  const phases = Array.from(document.querySelectorAll<HTMLElement>('[data-flow-phase]'))
+  const backButton = document.querySelector<HTMLButtonElement>('[data-flow-back]')
+  const restartButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-flow-restart]'))
+  const count = document.querySelector<HTMLElement>('[data-flow-count]')
+  const history: string[] = []
+  let currentId = 'foundation'
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+  const showNode = (id: string, announce = true) => {
+    const nextNode = nodes.find((node) => node.dataset.flowNode === id)
+    if (!nextNode) return
+
+    currentId = id
+    nodes.forEach((node) => { node.hidden = node !== nextNode })
+
+    const currentPhase = Number(nextNode.dataset.phase)
+    phases.forEach((phase) => {
+      const phaseNumber = Number(phase.dataset.flowPhase)
+      phase.classList.toggle('active', phaseNumber === currentPhase)
+      phase.classList.toggle('complete', phaseNumber < currentPhase)
+    })
+
+    const activePhase = phases.find((phase) => Number(phase.dataset.flowPhase) === currentPhase)
+    const progress = activePhase?.closest<HTMLElement>('.flow-progress')
+    if (activePhase && progress) {
+      progress.scrollTo({
+        left: activePhase.offsetLeft - (progress.clientWidth - activePhase.clientWidth) / 2,
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      })
+    }
+
+    if (backButton) backButton.hidden = history.length === 0
+    restartButtons.forEach((button) => { button.hidden = history.length === 0 })
+    if (count) count.textContent = history.length === 0 ? 'First decision' : `${history.length} ${history.length === 1 ? 'step' : 'steps'} complete`
+
+    const heading = nextNode.querySelector<HTMLElement>('h3')
+    if (announce && heading) {
+      heading.focus({ preventScroll: true })
+      nextNode.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' })
+    }
+  }
+
+  const restart = () => {
+    history.splice(0)
+    showNode('foundation')
+  }
+
+  document.querySelector('.flow-guide')?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-flow-next]')
+    if (!button) return
+
+    if (button.hasAttribute('data-flow-reset')) {
+      restart()
+      return
+    }
+
+    history.push(currentId)
+    showNode(button.dataset.flowNext || 'foundation')
+  })
+
+  backButton?.addEventListener('click', () => {
+    const previous = history.pop()
+    if (previous) showNode(previous)
+  })
+
+  restartButtons.forEach((button) => button.addEventListener('click', restart))
+  showNode(currentId, false)
+</script>

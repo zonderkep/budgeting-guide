@@ -4,6 +4,7 @@ export const navigation = [
   { href: '/day-to-day/', label: 'Day to day' },
   { href: '/month-close/', label: 'Monthly review' },
   { href: '/evolve/', label: 'Evolve' },
+  { href: '/money-priorities/', label: 'Money priorities' },
   { href: '/references/', label: 'References' },
 ]
 

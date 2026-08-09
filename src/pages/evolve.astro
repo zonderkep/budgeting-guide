@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import Checklist from '../components/Checklist.astro'
+import ChecklistScript from '../components/ChecklistScript.astro'
+import Callout from '../components/Callout.astro'
+import NextStep from '../components/NextStep.astro'
+
+const learningItems = [
+  { text: 'Review categories that went negative.', detail: 'Decide if the plan was too low or the spending was unusual.' },
+  { text: 'Name each surprise.', detail: 'Add a clear category for a cost that can happen again.' },
+  { text: 'Check annual costs.', detail: 'Divide each known cost by the months left. Save that amount each month.' },
+  { text: 'Improve one useful rule.', detail: 'Clean a payee name or categorize a predictable transaction.' },
+  { text: 'Remove categories that do not help.', detail: 'A shorter useful list is better than a long list that you ignore.' },
+]
+---
+
+<BaseLayout title="Evolve your budget" description="Learn from overspending and surprises, then improve categories and Actual Budget rules.">
+  <PageHero eyebrow="Step 5 · Evolve" title="Use what the budget taught you." intro="A budget is a plan that can change. Fix problems now. Then make the next month easier." step={5} />
+  <div class="content-shell">
+    <section class="content-section" aria-labelledby="overspending-heading">
+      <div class="section-heading narrow"><p class="eyebrow">When a category is negative</p><h2 id="overspending-heading">Cover it. Then learn from it.</h2></div>
+      <ol class="priority-list evolve-list">
+        <li><span>Now</span><div><h3>Move available money.</h3><p>Take money from a lower-priority category. Cover the full negative amount.</p></div></li>
+        <li><span>Ask</span><div><h3>Was this unusual?</h3><p>Keep the current target when the cost is unlikely to happen again.</p></div></li>
+        <li><span>Change</span><div><h3>Adjust a weak plan.</h3><p>Raise the category amount when the same need appears often. Reduce another category so the plan stays at zero.</p></div></li>
+      </ol>
+    </section>
+
+    <Callout title="Do not hide the problem." tone="coral">
+      <p>Do not use a balance adjustment to cover normal overspending. Move money and update the plan.</p>
+    </Callout>
+
+    <section class="content-section" aria-labelledby="surprise-heading">
+      <div class="section-heading narrow"><p class="eyebrow">When an “unexpected” cost appears</p><h2 id="surprise-heading">Make it expected next time.</h2><p>Do not keep one large “unexpected” category. Give a repeating cost a clear name.</p></div>
+      <div class="strategy-grid">
+        <article><span>Annual</span><h3>Create a dated fund.</h3><p>Examples: registration, school fees, memberships, and holidays.</p><b>Cost ÷ months left</b></article>
+        <article><span>Irregular</span><h3>Build a capped buffer.</h3><p>Examples: car repairs, home repairs, medical costs, and pet care.</p><b>Fund it to the cap</b></article>
+        <article><span>Changed</span><h3>Update the category.</h3><p>Change the monthly amount when the normal cost has increased.</p><b>Use recent spending</b></article>
+      </div>
+    </section>
+
+    <section class="rules-panel" aria-labelledby="rules-heading">
+      <div><p class="eyebrow">Actual Budget rules</p><h2 id="rules-heading">Teach Actual as you work.</h2><p>Use a rule when the same transaction needs the same change each time.</p></div>
+      <div class="rule-examples">
+        <div><span>Bank text</span><code>AMZN Mktp US*8K42</code><b aria-hidden="true">→</b><span>Payee name</span><code>Amazon</code></div>
+        <div><span>Known payee</span><code>City Water</code><b aria-hidden="true">→</b><span>Category</span><code>Water</code></div>
+      </div>
+      <ul class="plain-list">
+        <li>Use one clear name for each payee.</li>
+        <li>Auto-categorize only when the payee usually has one category.</li>
+        <li>Do not auto-categorize mixed stores such as Amazon.</li>
+        <li>Check a new rule before you trust it.</li>
+      </ul>
+      <a class="text-link" href="https://actualbudget.org/docs/budgeting/rules/">Read the official rules guide ↗</a>
+    </section>
+
+    <section class="content-section learn-checklist" aria-labelledby="learn-heading">
+      <div class="section-heading narrow"><p class="eyebrow">After each monthly review</p><h2 id="learn-heading">Make a few useful changes.</h2></div>
+      <Checklist id="evolve" items={learningItems} />
+    </section>
+
+    <NextStep href="/setup/" label="Start the next cycle" title="Use the improved plan." text="Assign new money to your current priorities. Keep learning as your needs change." />
+  </div>
+  <ChecklistScript />
+</BaseLayout>

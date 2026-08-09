@@ -1,17 +1,21 @@
 ---
-import { steps } from '../data/site'
-const { current = 0 } = Astro.props
+import { budgetSections } from '../data/site'
 ---
 
-<nav class="budget-trail" aria-label="Budget steps">
-  <ol>
-    {steps.map((step, index) => (
-      <li class:list={{ active: index + 1 === current, complete: current > index + 1 }}>
-        <a href={step.href} aria-current={index + 1 === current ? 'step' : undefined}>
-          <span>{step.short}</span>
-          {step.label}
-        </a>
-      </li>
-    ))}
-  </ol>
+<nav class="budget-trail" aria-label="Budget guide">
+  {budgetSections.map((section) => (
+    <div class="budget-trail-section">
+      <p>{section.label}</p>
+      <ol>
+        {section.items.map((item) => (
+          <li class:list={{ active: Astro.url.pathname === item.href }}>
+            <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>
+              <span>{item.short}</span>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ))}
 </nav>

@@ -1,36 +1,23 @@
 ---
-import { Image } from 'astro:assets'
-import sourceFlowchart from '../../Spending Flowchart.jpg'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PageHero from '../components/PageHero.astro'
 import SpendingFlow from '../components/SpendingFlow.astro'
+import StabilityCheck from '../components/StabilityCheck.astro'
 import Callout from '../components/Callout.astro'
 ---
 
-<BaseLayout title="Money priorities" description="Follow a guided US spending flowchart for emergency savings, debt, retirement, and other goals.">
-  <PageHero eyebrow="Beyond the budget · United States" title="Where should the next dollar go?" intro="First, make the budget stable. Then use this path to choose the next priority for extra money." />
+<BaseLayout title="Money priorities" description="Choose what your next available dollar should support after the budget is stable.">
+  <PageHero eyebrow="The financial path · United States" title="Where should the next dollar go?" intro="Your budget creates stability. Use this path to choose the next priority for extra money." />
 
   <div class="flow-shell">
     <Callout title="Use this as general education." tone="yellow">
       <p>This path is for the United States. It is not personal financial, tax, or legal advice. Interest rates, tax limits, and account rules can change.</p>
     </Callout>
 
+    <StabilityCheck />
+
     <SpendingFlow />
 
-    <section class="source-chart" aria-labelledby="source-chart-heading">
-      <div class="section-heading narrow">
-        <p class="eyebrow">Source of truth</p>
-        <h2 id="source-chart-heading">View the complete flowchart.</h2>
-        <p>The guided path above follows this chart. Open the full image when you want to see every branch at once.</p>
-      </div>
-      <figure>
-        <a href={sourceFlowchart.src} aria-label="Open the full-size Personal Income Spending Flowchart image">
-          <Image src={sourceFlowchart} alt="Personal Income Spending Flowchart for the United States. The accessible guided path above describes its steps and branches." widths={[480, 900, 1400]} sizes="(max-width: 700px) calc(100vw - 28px), 1060px" format="webp" />
-        </a>
-        <figcaption>
-          Detailed flowchart by Reddit user atlasvoid, based on a flowchart by beerface89. Supporting text comes from the <a href="https://www.reddit.com/r/personalfinance/wiki/commontopics">Personal Finance Wiki’s Common Topics guide</a>.
-        </figcaption>
-      </figure>
-    </section>
+    <p class="flow-reference-link"><a class="text-link" href="/references/#priority-sources">See the original flowchart and supporting sources <span aria-hidden="true">→</span></a></p>
   </div>
 </BaseLayout>

@@ -5,6 +5,7 @@ import '@fontsource/atkinson-hyperlegible/700.css'
 import '../styles/global.css'
 import SiteHeader from '../components/SiteHeader.astro'
 import SiteFooter from '../components/SiteFooter.astro'
+import { site } from '../data/site'
 
 interface Props {
   title: string
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props
-const pageTitle = title === 'Budget, Step by Step' ? title : `${title} | Budget, Step by Step`
+const pageTitle = title === site.name ? title : `${title} | ${site.name}`
 ---
 
 <!doctype html>

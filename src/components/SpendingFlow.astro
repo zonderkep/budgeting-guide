@@ -7,15 +7,15 @@ import { flowNodes, flowPhases } from '../data/spendingFlow'
     <div>
       <p class="eyebrow">Guided path</p>
       <h2 id="flow-guide-heading">Start with the first priority.</h2>
-      <p>Complete each item that applies to you. The path does not save your answers.</p>
+      <p>Answer based on your current situation. Your place in the path saves in this browser so you can return later.</p>
     </div>
     <button class="text-button flow-restart" type="button" data-flow-restart hidden>Start again</button>
   </div>
 
   <nav class="flow-progress" aria-label="Money priority phases">
     <ol>
-      {flowPhases.map((phase) => (
-        <li data-flow-phase={phase.number} class:list={{ active: phase.number === 0 }}>
+      {flowPhases.filter((phase) => phase.number > 0).map((phase) => (
+        <li data-flow-phase={phase.number}>
           <span>{phase.number}</span>
           <small>{phase.short}</small>
         </li>
@@ -26,7 +26,7 @@ import { flowNodes, flowPhases } from '../data/spendingFlow'
   <div class="flow-stage">
     {flowNodes.map((node, index) => (
       <article class:list={['flow-node', `flow-node-${node.kind}`, `flow-phase-${node.phase}`]} data-flow-node={node.id} data-phase={node.phase} hidden={index !== 0}>
-        <div class="flow-node-label"><span>Phase {node.phase}</span><b>{flowPhases[node.phase].label}</b></div>
+        <div class="flow-node-label"><span>Stage {node.phase === 0 ? 1 : node.phase === 1 ? 2 : node.phase === 2 ? 3 : node.phase === 3 ? 4 : node.phase < 6 ? 5 : 6}</span><b>{node.phase === 0 ? 'Create stability' : node.phase === 1 ? 'Build a safety net' : node.phase === 2 ? 'Claim employer benefits' : node.phase === 3 ? 'Reduce costly debt' : node.phase < 6 ? 'Prepare for retirement' : 'Fund other goals'}</b></div>
         <h3 tabindex="-1">{node.title}</h3>
         <p>{node.text}</p>
         {node.items && <ul>{node.items.map((item) => <li>{item}</li>)}</ul>}
@@ -58,18 +58,38 @@ import { flowNodes, flowPhases } from '../data/spendingFlow'
   const backButton = document.querySelector<HTMLButtonElement>('[data-flow-back]')
   const restartButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-flow-restart]'))
   const count = document.querySelector<HTMLElement>('[data-flow-count]')
-  const history: string[] = []
-  let currentId = 'foundation'
+  const storageKey = 'money-step-by-step-v2'
+  const validIds = new Set(nodes.map((node) => node.dataset.flowNode).filter(Boolean))
+  const readProgress = (): { moneyPriorities?: { currentNodeId?: string, history?: string[] } } => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '{}')
+    } catch {
+      return {}
+    }
+  }
+  const saved = readProgress().moneyPriorities
+  const history: string[] = (saved?.history || []).filter((id): id is string => validIds.has(id))
+  let currentId = saved?.currentNodeId && validIds.has(saved.currentNodeId) ? saved.currentNodeId : 'foundation'
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
-  const showNode = (id: string, announce = true) => {
+  const stageForPhase = (phase: number) => phase === 0 ? 1 : phase === 1 ? 2 : phase === 2 ? 3 : phase === 3 ? 4 : phase < 6 ? 5 : 6
+
+  const saveProgress = () => {
+    const current = readProgress()
+    localStorage.setItem(storageKey, JSON.stringify({
+      ...current,
+      moneyPriorities: { currentNodeId: currentId, history },
+    }))
+  }
+
+  const showNode = (id: string, announce = true, persist = true) => {
     const nextNode = nodes.find((node) => node.dataset.flowNode === id)
     if (!nextNode) return
 
     currentId = id
     nodes.forEach((node) => { node.hidden = node !== nextNode })
 
-    const currentPhase = Number(nextNode.dataset.phase)
+    const currentPhase = stageForPhase(Number(nextNode.dataset.phase))
     phases.forEach((phase) => {
       const phaseNumber = Number(phase.dataset.flowPhase)
       phase.classList.toggle('active', phaseNumber === currentPhase)
@@ -90,6 +110,7 @@ import { flowNodes, flowPhases } from '../data/spendingFlow'
     if (count) count.textContent = history.length === 0 ? 'First decision' : `${history.length} ${history.length === 1 ? 'step' : 'steps'} complete`
 
     const heading = nextNode.querySelector<HTMLElement>('h3')
+    if (persist) saveProgress()
     if (announce && heading) {
       heading.focus({ preventScroll: true })
       nextNode.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' })
@@ -120,5 +141,5 @@ import { flowNodes, flowPhases } from '../data/spendingFlow'
   })
 
   restartButtons.forEach((button) => button.addEventListener('click', restart))
-  showNode(currentId, false)
+  showNode(currentId, false, false)
 </script>

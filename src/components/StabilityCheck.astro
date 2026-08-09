@@ -1,0 +1,70 @@
+---
+const items = [
+  { text: 'Accounts and balances are current.', href: '/setup/', label: 'Update accounts' },
+  { text: 'Every available dollar has a job.', href: '/setup/', label: 'Assign available money' },
+  { text: 'Essential costs are funded until the next income arrives.', href: '/day-to-day/', label: 'Review funding order' },
+  { text: 'Minimum debt payments and current bills are covered.', href: '/day-to-day/', label: 'Check essentials' },
+  { text: 'Known upcoming costs have a plan.', href: '/categories/#future-costs', label: 'Plan future costs' },
+  { text: 'Negative categories and overspending are resolved.', href: '/evolve/', label: 'Cover overspending' },
+  { text: 'The plan does not depend on new debt to balance.', href: '/evolve/', label: 'Improve the plan' },
+]
+---
+
+<section class="stability-check" aria-labelledby="stability-heading" data-stability-check>
+  <div class="stability-heading">
+    <div>
+      <p class="eyebrow">Before the next priority</p>
+      <h2 id="stability-heading">Is the budget stable enough to move forward?</h2>
+      <p>Use this as a readiness check, not a test. If an item is not true yet, follow the help link and return when you are ready.</p>
+    </div>
+    <p class="stability-count" data-stability-count>0 of {items.length} ready</p>
+  </div>
+  <div class="stability-list">
+    {items.map((item, index) => {
+      const inputId = `stability-${index}`
+      return (
+        <div class="stability-row">
+          <label for={inputId}>
+            <input id={inputId} type="checkbox" data-stability-index={index} />
+            <span class="custom-check" aria-hidden="true"></span>
+            <strong>{item.text}</strong>
+          </label>
+          <a href={item.href}>{item.label} <span aria-hidden="true">↗</span></a>
+        </div>
+      )
+    })}
+  </div>
+  <p class="stability-ready" data-stability-ready hidden>When these items are covered, continue to the first longer-term priority.</p>
+</section>
+
+<script>
+  const storageKey = 'money-step-by-step-v2'
+  const section = document.querySelector<HTMLElement>('[data-stability-check]')
+  const count = section?.querySelector<HTMLElement>('[data-stability-count]')
+  const ready = section?.querySelector<HTMLElement>('[data-stability-ready]')
+  const inputs = Array.from(section?.querySelectorAll<HTMLInputElement>('[data-stability-index]') || [])
+
+  const readState = (): { stability?: number[] } => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '{}')
+    } catch {
+      return {}
+    }
+  }
+
+  const state = readState()
+  const update = () => {
+    const checked = inputs.filter((input) => input.checked).map((input) => Number(input.dataset.stabilityIndex))
+    const next = { ...state, stability: checked }
+    localStorage.setItem(storageKey, JSON.stringify(next))
+    if (count) count.textContent = `${checked.length} of ${inputs.length} ready`
+    if (ready) ready.hidden = checked.length !== inputs.length
+  }
+
+  const checked = state.stability || []
+  inputs.forEach((input) => {
+    input.checked = checked.includes(Number(input.dataset.stabilityIndex))
+    input.addEventListener('change', update)
+  })
+  update()
+</script>

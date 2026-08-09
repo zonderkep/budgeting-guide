@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import BudgetTrail from '../components/BudgetTrail.astro'
+import Callout from '../components/Callout.astro'
+---
+
+<BaseLayout title="Budget guide" description="Build and maintain a household budget as part of a complete money system.">
+  <PageHero eyebrow="The budget routine" title="Give your money a plan you can keep using." intro="Your budget shows what money is available. Your priorities help you decide what to fund next." />
+  <div class="content-shell budget-hub">
+    <BudgetTrail />
+
+    <section class="hub-intro" aria-labelledby="budget-hub-heading">
+      <p class="eyebrow">Two parts of one system</p>
+      <h2 id="budget-hub-heading">Get started once. Keep it working.</h2>
+      <p>Set up the basic structure, then return to the routine whenever money arrives or the month changes.</p>
+    </section>
+
+    <div class="hub-grid">
+      <section class="hub-card hub-card-start" aria-labelledby="start-budget-heading">
+        <p class="eyebrow">Get started</p>
+        <h2 id="start-budget-heading">Create the first plan.</h2>
+        <p>Add accounts, brainstorm useful categories, and assign the money you have now.</p>
+        <div class="hub-links">
+          <a class="button button-dark" href="/setup/">Set up accounts <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/categories/">Plan your categories</a>
+        </div>
+      </section>
+      <section class="hub-card hub-card-routine" aria-labelledby="routine-heading">
+        <p class="eyebrow">Keep it working</p>
+        <h2 id="routine-heading">Use the plan in real life.</h2>
+        <p>Process spending, review the month, and improve the plan based on what actually happened.</p>
+        <div class="hub-links">
+          <a class="button button-primary" href="/day-to-day/">Use your budget <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/month-close/">See the monthly review</a>
+        </div>
+      </section>
+    </div>
+
+    <Callout title="A budget is the engine for your priorities." tone="yellow">
+      <p>When the essentials are covered and the plan is current, use the money-priorities guide to decide whether the next dollar should support safety, debt, retirement, or another goal.</p>
+      <a class="text-link" href="/money-priorities/">Choose a money priority <span aria-hidden="true">→</span></a>
+    </Callout>
+  </div>
+</BaseLayout>

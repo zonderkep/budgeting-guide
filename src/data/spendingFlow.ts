@@ -15,13 +15,13 @@ export interface FlowNode {
 }
 
 export const flowPhases = [
-  { number: 0, label: 'Build the foundation', short: 'Foundation' },
+  { number: 0, label: 'Create stability', short: 'Stability' },
   { number: 1, label: 'Build a safety net', short: 'Safety net' },
-  { number: 2, label: 'Claim employer matching', short: 'Match' },
+  { number: 2, label: 'Claim employer benefits', short: 'Benefits' },
   { number: 3, label: 'Reduce costly debt', short: 'Debt' },
-  { number: 4, label: 'Save for retirement', short: 'Retirement' },
-  { number: 5, label: 'Increase retirement saving', short: 'Save more' },
-  { number: 6, label: 'Choose other goals', short: 'Other goals' },
+  { number: 4, label: 'Prepare for retirement', short: 'Retirement' },
+  { number: 5, label: 'Prepare for retirement', short: 'Retirement' },
+  { number: 6, label: 'Fund other goals', short: 'Other goals' },
 ]
 
 export const flowNodes: FlowNode[] = [

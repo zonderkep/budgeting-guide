@@ -1,14 +1,14 @@
 ---
-import { navigation } from '../data/site'
+import { navigation, site } from '../data/site'
 
 const pathname = Astro.url.pathname
 ---
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="/" aria-label="Budget, Step by Step home">
+    <a class="brand" href="/" aria-label={`${site.name} home`}>
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span>Budget, <strong>Step by Step</strong></span>
+      <span>Money, <strong>Step by Step</strong></span>
     </a>
     <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
       <span class="menu-label">Menu</span>
